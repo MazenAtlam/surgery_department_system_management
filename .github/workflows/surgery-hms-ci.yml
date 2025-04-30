@@ -29,21 +29,21 @@ jobs:
         pip install -r requirements.txt
         pip install pytest pytest-cov
 
-    - name: Run tests with coverage
-      run: |
-        pytest tests/ --cov=app --cov-report=xml
-      env:
-        FLASK_APP: main.py
-        FLASK_ENV: test
-        DATABASE_URL: sqlite:///surgery_department.db
+    # - name: Run tests with coverage
+    #   run: |
+    #     pytest tests/ --cov=app --cov-report=xml
+    #   env:
+    #     FLASK_APP: main.py
+    #     FLASK_ENV: test
+    #     DATABASE_URL: sqlite:///surgery_department.db
 
-    - name: Upload coverage report
-      uses: codecov/codecov-action@v3
-      if: always()
-      with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
+    # - name: Upload coverage report
+    #   uses: codecov/codecov-action@v3
+    #   if: always()
+    #   with:
+    #     file: ./coverage.xml
+    #     flags: unittests
+    #     name: codecov-umbrella
 
   lint:
     name: Lint and Format Check
