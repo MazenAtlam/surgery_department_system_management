@@ -8,10 +8,10 @@ python-dotenv==1.0.0
 
 # Database Support (choose one based on your DB)
 # PostgreSQL
-psycopg2-binary==2.9.6
+#psycopg2-binary==2.9.6
 
 # Security
-bcrypt==4.0.1
+#bcrypt==4.0.1
 PyJWT==2.7.0
 
 # API Support (if needed)
