@@ -1,1 +1,1 @@
-# Hospital Management System (HIS) for a Surgery Department
+# Hospital Management System (HMS) for a Surgery Department
