@@ -1,10 +1,12 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from app import db
 from base_model import BaseModel
 
+from app import db
+
+
 class User(BaseModel):
-    __tablename__ = 'user'
+    __tablename__ = "user"
 
     email: so.Mapped[str] = so.mapped_column(unique=True)
     password: so.Mapped[str] = so.mapped_column()

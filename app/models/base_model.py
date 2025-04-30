@@ -1,9 +1,11 @@
-from typing import Optional
-import sqlalchemy as sa
-import sqlalchemy.orm as so
-from app import db
 import uuid
 from datetime import datetime
+from typing import Optional
+
+import sqlalchemy as sa
+import sqlalchemy.orm as so
+
+from app import db
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -19,10 +21,10 @@ def gen_datetime():
 
 class BaseModel(db.Model):
     """
-        Base model class
-        Args:
-            db (): Database object
-        """
+    Base model class
+    Args:
+        db (): Database object
+    """
 
     __abstract__ = True
     id: so.Mapped[str] = so.mapped_column(
