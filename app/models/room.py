@@ -1,6 +1,7 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from base_model import BaseModel
+from department import Department
 
 from app import db
 
@@ -12,9 +13,9 @@ class Room(BaseModel):
         sa.ForeignKey("medical_devices.id"), unique=True
     )
 
-    #room_department_id: so.Mapped[str] = so.mapped_column(
-     #   sa.ForeignKey("departments.id"), unique=True
-    #)
-    #room_department: so.Mapped["Department"] = so.relationship(
-     #   "Department", back_populates="room_department"
-    #)
+    room_department_id: so.Mapped[str] = so.mapped_column(
+        sa.ForeignKey("departments.id"), unique=True
+    )
+    room_department: so.Mapped["Department"] = so.relationship(
+        "Department", back_populates="room_department"
+    )
