@@ -6,7 +6,7 @@ from user import User
 from app import db
 
 
-class UploadedFiles(BaseModel):
+class UploadedFile(BaseModel):
     __tablename__ = "uploaded_files"
     user_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("user.id"), unique=True)
     user: so.Mapped["User"] = so.relationship("User", back_populates="uploaded_files")

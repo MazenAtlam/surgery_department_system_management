@@ -6,7 +6,7 @@ from department import Department
 from app import db
 
 
-class MedicalDevices(BaseModel):
+class MedicalDevice(BaseModel):
     __tablename__ = "medical_devices"
     medical_device_name: so.Mapped[str] = so.mapped_column(unique=True)
     medical_device_department: so.Mapped[str] = so.mapped_column(
