@@ -1,11 +1,13 @@
+from typing import List
+
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from appointment import Appointment
 from base_model import BaseModel
 from user import User
 
 from app import db
-from appointment import Appointment
-from typing import List
+
 
 class UploadedFile(BaseModel):
     __tablename__ = "uploaded_files"

@@ -9,13 +9,10 @@ from app import db
 class MedicalDevice(BaseModel):
     __tablename__ = "medical_devices"
     medical_device_name: so.Mapped[str] = so.mapped_column(unique=True)
-    department_id: so.Mapped[str] = so.mapped_column(
-        sa.ForeignKey("departments.id")
-    )
+    department_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("departments.id"))
 
     department: so.Mapped["Department"] = so.relationship(
-        "Department",
-        back_populates="medical_devices"
+        "Department", back_populates="medical_devices"
     )
     medical_device_price: so.Mapped[float] = so.mapped_column(unique=True)
     medical_device_state: so.Mapped[str] = so.mapped_column(unique=True)
