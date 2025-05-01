@@ -4,6 +4,7 @@ from base_model import BaseModel
 
 from app import db
 
+
 class Department(BaseModel):
     __tablename__ = "department"
     department_name: so.Mapped[str] = so.mapped_column(unique=True)
