@@ -3,13 +3,26 @@ from datetime import date
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from base_model import BaseModel
+from flask_login import UserMixin
 from phone_number import PhoneNumber
 from role import Role
 from uploaded_file import UploadedFile
 
+from app.utils.password_utils import PasswordMixin
 
-class User(BaseModel):
+
+class User(BaseModel, PasswordMixin, UserMixin):
     __abstract__ = True
+
+    def __init__(self, password: str, **kwargs):
+        """
+        Constructor for the Doctor class
+        Args:
+            passwd (str): Password for the doctor
+            **kwargs: Arbitrary keyword arguments
+        """
+        PasswordMixin.__init__(self, password)
+        super().__init__(**kwargs)
 
     name: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False)
     gender: so.Mapped[str] = so.mapped_column(
