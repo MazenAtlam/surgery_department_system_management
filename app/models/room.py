@@ -2,11 +2,10 @@ from typing import List
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from appointment import Appointment
-from base_model import BaseModel
-from department import Department
 
-from app import db
+import app.models as m
+
+from .base_model import BaseModel
 
 
 class Room(BaseModel):
@@ -18,9 +17,9 @@ class Room(BaseModel):
 
     department_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("departments.id"))
 
-    department: so.Mapped["Department"] = so.relationship(
+    department: so.Mapped["m.Department"] = so.relationship(
         "Department", back_populates="rooms"
     )
-    appointments: so.Mapped[List["Appointment"]] = so.relationship(
+    appointments: so.Mapped[List["m.Appointment"]] = so.relationship(
         "Appointment", back_populates="room"
     )

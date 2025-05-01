@@ -1,7 +1,9 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from base_model import BaseModel
-from patient import Patient
+
+import app.models as m
+
+from .base_model import BaseModel
 
 
 class MedicalHistory(BaseModel):
@@ -12,6 +14,6 @@ class MedicalHistory(BaseModel):
     patient_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("patients.id"), nullable=False, index=True
     )
-    patient: so.Mapped["Patient"] = so.relationship(
+    patient: so.Mapped["m.Patient"] = so.relationship(
         "Patient", back_populates="medical_history"
     )

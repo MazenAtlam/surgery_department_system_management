@@ -2,8 +2,10 @@ from enum import Enum
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from base_model import BaseModel
-from doctor import Doctor
+
+import app.models as m
+
+from .base_model import BaseModel
 
 
 class DayOfWeek(str, Enum):
@@ -26,7 +28,7 @@ class WorkingSlot(BaseModel):
         sa.ForeignKey("doctors.id"), index=True, nullable=False
     )
 
-    doctor: so.Mapped["Doctor"] = so.relationship(
+    doctor: so.Mapped["m.Doctor"] = so.relationship(
         "Doctor", back_populates="working_slots"
     )
 
