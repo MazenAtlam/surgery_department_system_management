@@ -4,7 +4,8 @@ from base_model import BaseModel
 from department import Department
 
 from app import db
-
+from typing import List
+from appointment import Appointment
 
 class Room(BaseModel):
     __tablename__ = "room"
@@ -13,9 +14,12 @@ class Room(BaseModel):
         sa.ForeignKey("medical_devices.id"), unique=True
     )
 
-    room_department_id: so.Mapped[str] = so.mapped_column(
-        sa.ForeignKey("departments.id"), unique=True
+    department_id: so.Mapped[str] = so.mapped_column(
+        sa.ForeignKey("departments.id")
     )
-    room_department: so.Mapped["Department"] = so.relationship(
-        "Department", back_populates="room_department"
+
+    department: so.Mapped["Department"] = so.relationship(
+        "Department",
+        back_populates="rooms"
     )
+    appointments: so.Mapped[List["Appointment"]] = so.relationship("Appointment", back_populates="room")
