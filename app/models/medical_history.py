@@ -12,4 +12,6 @@ class MedicalHistory(BaseModel):
     patient_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("patients.id"), nullable=False, index=True
     )
-    patient: so.Mapped["Patient"] = so.relationship("Patient", back_populates="medical_history")
+    patient: so.Mapped["Patient"] = so.relationship(
+        "Patient", back_populates="medical_history"
+    )

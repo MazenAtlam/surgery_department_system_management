@@ -1,10 +1,11 @@
 from typing import List
+
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from appointment import Appointment
 from base_model import BaseModel
 from dependent import Dependent
-from appointment import Appointment
-from medical_history import  MedicalHistory
+from medical_history import MedicalHistory
 
 
 class Patient(BaseModel):
