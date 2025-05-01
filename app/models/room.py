@@ -1,5 +1,8 @@
+from typing import List
+
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from appointment import Appointment
 from base_model import BaseModel
 from department import Department
 
@@ -13,9 +16,11 @@ class Room(BaseModel):
         sa.ForeignKey("medical_devices.id"), unique=True
     )
 
-    room_department_id: so.Mapped[str] = so.mapped_column(
-        sa.ForeignKey("departments.id"), unique=True
+    department_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("departments.id"))
+
+    department: so.Mapped["Department"] = so.relationship(
+        "Department", back_populates="rooms"
     )
-    room_department: so.Mapped["Department"] = so.relationship(
-        "Department", back_populates="room_department"
+    appointments: so.Mapped[List["Appointment"]] = so.relationship(
+        "Appointment", back_populates="room"
     )
