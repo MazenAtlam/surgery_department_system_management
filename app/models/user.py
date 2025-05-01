@@ -3,18 +3,16 @@ from typing import List
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from base_model import BaseModel
+import app.models as m
 from flask_login import UserMixin
-from phone_number import PhoneNumber
-from role import Role
 from sqlalchemy.ext.hybrid import hybrid_property
-from uploaded_file import UploadedFile
 
+from app.models.base_model import BaseModel
 from app.utils.password_utils import PasswordMixin
 
 
 class User(BaseModel, PasswordMixin, UserMixin):
-    __abstract__ = True
+    __tablename__ = "users"
 
     def __init__(self, password: str, **kwargs):
         """
@@ -39,15 +37,24 @@ class User(BaseModel, PasswordMixin, UserMixin):
     role_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("roles.id"), nullable=False, index=True
     )
-    role: so.Mapped["Role"] = so.relationship("Role", back_populates="users")
-    phone_numbers: so.Mapped[List["PhoneNumber"]] = so.relationship(
+    role: so.Mapped["m.Role"] = so.relationship("Role", back_populates="users")
+    phone_numbers: so.Mapped[List["m.PhoneNumber"]] = so.relationship(
         "PhoneNumber", back_populates="user"
     )
     pic_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("uploaded_files.id"), nullable=True
     )
-    _pic: so.Mapped["UploadedFile"] = so.relationship(
+    _pic: so.Mapped["m.UploadedFile"] = so.relationship(
         "UploadedFile", back_populates="user", uselist=False
+    )
+    patients: so.Mapped[List["m.Patient"]] = so.relationship(
+        "Patient", back_populates="user", uselist=False
+    )
+    doctors: so.Mapped[List["m.Doctor"]] = so.relationship(
+        "Doctor", back_populates="user", uselist=False
+    )
+    admins: so.Mapped[List["m.Admin"]] = so.relationship(
+        "Admin", back_populates="user", uselist=False
     )
 
     @hybrid_property
@@ -63,7 +70,7 @@ class User(BaseModel, PasswordMixin, UserMixin):
     @classmethod
     def get_default_pic(cls):
         """Returns the default UploadedFile instance for default.png"""
-        default_file = UploadedFile.query.filter_by(filename="default.png").first()
+        default_file = m.UploadedFile.query.filter_by(filename="default.png").first()
         if not default_file:
             raise ValueError(
                 "Default profile picture 'default.png' not found in database"

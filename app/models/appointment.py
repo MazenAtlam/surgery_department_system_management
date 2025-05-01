@@ -1,30 +1,24 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from base_model import BaseModel
-from doctor import Doctor
-from patient import Patient
-from room import Room
-from uploaded_file import UploadedFile
-
-from app import db
-
+from .base_model import BaseModel
+import app.models as m
 
 class Appointment(BaseModel):
     __tablename__ = "appointments"
     patient_id: so.Mapped[str] = so.mapped_column(
-        sa.ForeignKey("patients.id"),
+        sa.ForeignKey("patients.id"), nullable=False
     )
-    doctor_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("doctors.id"))
-    appointment_date_time: so.Mapped[str] = so.mapped_column(sa.DateTime)
-    room_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("room.id"))
-    file_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("uploaded_files.id"))
-    patient: so.Mapped["Patient"] = so.relationship(
+    patient: so.Mapped["m.Patient"] = so.relationship(
         "Patient", back_populates="appointments"
     )
-    doctor: so.Mapped["Doctor"] = so.relationship(
+    doctor_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("doctors.id"), nullable=False)
+    doctor: so.Mapped["m.Doctor"] = so.relationship(
         "Doctor", back_populates="appointments"
     )
-    room: so.Mapped["Room"] = so.relationship("Room", back_populates="appointments")
-    file: so.Mapped["UploadedFile"] = so.relationship(
+    appointment_date_time: so.Mapped[str] = so.mapped_column(sa.DateTime, nullable=False)
+    room_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("room.id"))
+    room: so.Mapped["m.Room"] = so.relationship("Room", back_populates="appointments")
+    file_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("uploaded_files.id"))
+    file: so.Mapped["m.UploadedFile"] = so.relationship(
         "UploadedFile", back_populates="appointments"
     )

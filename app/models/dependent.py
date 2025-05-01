@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from base_model import BaseModel
-from patient import Patient
+from .base_model import BaseModel
+import app.models as m
 
 
 class Dependent(BaseModel):
@@ -14,6 +14,6 @@ class Dependent(BaseModel):
     patient_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("patients.id"), nullable=False
     )
-    patient: so.Mapped["Patient"] = so.relationship(
+    patient: so.Mapped["m.Patient"] = so.relationship(
         "Patient", back_populates="dependents"
     )
