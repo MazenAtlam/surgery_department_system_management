@@ -3,6 +3,4 @@ from user import User
 
 
 class Doctor(BaseModel, User):
-
-    __tablename__ = 'doctors'
-
+    __tablename__ = "doctors"
