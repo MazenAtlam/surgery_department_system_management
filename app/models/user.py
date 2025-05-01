@@ -3,10 +3,10 @@ from typing import List
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-import app.models as m
 from flask_login import UserMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 
+import app.models as m
 from app.models.base_model import BaseModel
 from app.utils.password_utils import PasswordMixin
 

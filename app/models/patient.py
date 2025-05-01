@@ -2,7 +2,9 @@ from typing import List
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+
 import app.models as m
+
 from .base_model import BaseModel
 
 

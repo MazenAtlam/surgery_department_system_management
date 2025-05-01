@@ -2,8 +2,10 @@ from enum import Enum
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from .base_model import BaseModel
+
 import app.models as m
+
+from .base_model import BaseModel
 
 
 class DayOfWeek(str, Enum):
@@ -17,7 +19,6 @@ class DayOfWeek(str, Enum):
 
 
 class WorkingSlot(BaseModel):
-
     __tablename__ = "working_slots"
     __table_args__ = (
         sa.CheckConstraint("end_time > start_time", name="check_time_validity"),

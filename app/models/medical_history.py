@@ -1,7 +1,9 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from .base_model import BaseModel
+
 import app.models as m
+
+from .base_model import BaseModel
 
 
 class MedicalHistory(BaseModel):

@@ -1,8 +1,11 @@
 from typing import List
 
 import sqlalchemy.orm as so
-from .base_model import BaseModel
+
 import app.models as m
+
+from .base_model import BaseModel
+
 
 class Department(BaseModel):
     __tablename__ = "departments"
