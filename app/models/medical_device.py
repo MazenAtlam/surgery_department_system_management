@@ -11,8 +11,8 @@ class MedicalDevices(BaseModel):
     medical_device_department: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("departments.id"), unique=True
     )
-    medical_device: so.Mapped["MedicalDevice"] = so.relationship(
-        "MedicalDevice", back_populates="medical_device_department"
-    )
-    medical_device_price: so.Mapped[int] = so.mapped_column(unique=True)
+    #medical_device: so.Mapped["Department"] = so.relationship(
+     #   "Department", back_populates="medical_device"
+    #)
+    medical_device_price: so.Mapped[float] = so.mapped_column(unique=True)
     medical_device_state: so.Mapped[str] = so.mapped_column(unique=True)

@@ -11,12 +11,10 @@ class Room(BaseModel):
     room_device_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("medical_devices.id"), unique=True
     )
-    room_device: so.Mapped["MedicalDevice"] = so.relationship(
-        "MedicalDevice", back_populates="room_device"
-    )
-    room_department_id: so.Mapped[str] = so.mapped_column(
-        sa.ForeignKey("departments.id"), unique=True
-    )
-    room_department: so.Mapped["Department"] = so.relationship(
-        "Department", back_populates="room_department"
-    )
+
+    #room_department_id: so.Mapped[str] = so.mapped_column(
+     #   sa.ForeignKey("departments.id"), unique=True
+    #)
+    #room_department: so.Mapped["Department"] = so.relationship(
+     #   "Department", back_populates="room_department"
+    #)
