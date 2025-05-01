@@ -1,12 +1,13 @@
-from typing import List
 from datetime import date
+from typing import List
+
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from appointment import Appointment
 from base_model import BaseModel
+from department import Department
 from user import User
 from working_slot import WorkingSlot
-from department import Department
-from appointment import Appointment
 
 
 class Doctor(BaseModel, User):
@@ -19,7 +20,15 @@ class Doctor(BaseModel, User):
     working_slots: so.Mapped[List["WorkingSlot"]] = so.relationship(
         "WorkingSlot", back_populates="doctor"
     )
-    department_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("departments.id"), nullable=False)
-    department: so.Mapped["Department"] = so.relationship("Department", back_populates="doctors")
-    appointment_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("appointments.id"), nullable=True)
-    appointment: so.Mapped["Appointment"] = so.relationship("Appointment", back_populates="doctors")
+    department_id: so.Mapped[str] = so.mapped_column(
+        sa.ForeignKey("departments.id"), nullable=False
+    )
+    department: so.Mapped["Department"] = so.relationship(
+        "Department", back_populates="doctors"
+    )
+    appointment_id: so.Mapped[str] = so.mapped_column(
+        sa.ForeignKey("appointments.id"), nullable=True
+    )
+    appointment: so.Mapped["Appointment"] = so.relationship(
+        "Appointment", back_populates="doctors"
+    )

@@ -1,8 +1,9 @@
 from enum import Enum
-from base_model import BaseModel
-from doctor import Doctor
+
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from base_model import BaseModel
+from doctor import Doctor
 
 
 class DayOfWeek(str, Enum):
