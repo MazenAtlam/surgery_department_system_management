@@ -16,10 +16,10 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
-    import app.routes as r
+    import app.routes.v1 as r
 
-    app.register_blueprint(r.auth_bp, url_prefix="/api/auth")
-    app.register_blueprint(r.user_bp, url_prefix="/api/user")
+    app.register_blueprint(r.auth_bp, url_prefix="/api/v1/auth")
+    app.register_blueprint(r.user_bp, url_prefix="/api/v1/user")
 
     return app
 

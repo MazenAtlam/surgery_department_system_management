@@ -12,10 +12,10 @@ def register_user(user_data):
     if m.User.query.filter_by(email=user_data["email"]).first():
         return {"success": False, "message": "Email already registered"}
 
-    role_id = m.Role.query.filter_by(name="Patient").first().id
+    role_id = m.Role.query.filter_by(name="patient").first().id
 
-    # Create new patient
-    new_patient = m.Patient()
+    # Add picture
+    pic_id = m.UploadedFile.query.filter_by(file_name="default").first().id
 
     # Convert string to date object
     dob_str = user_data["dob"]  # This comes from your input data
@@ -32,7 +32,7 @@ def register_user(user_data):
         gender=gender,
         dob=dob,
         role_id=role_id,
-        patient_id=new_patient.id,
+        pic_id=pic_id,
     )
 
     db.session.add(new_user)

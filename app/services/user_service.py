@@ -1,4 +1,5 @@
 import sqlite3
+from pathlib import Path
 from typing import Dict, List, Optional
 
 from flask import current_app
@@ -18,7 +19,14 @@ def get_user_data_by_id(user_id: str) -> Optional[Dict]:
     """
     conn = None
     try:
-        conn = sqlite3.connect(Config.SQLALCHEMY_DATABASE_URI)
+        db_path = Config.SQLALCHEMY_DATABASE_URI.replace("sqlite:///", "")
+
+        # Verify database file exists
+        if not Path(db_path).exists():
+            current_app.logger.error(f"Database file not found at: {db_path}")
+            return None
+
+        conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
 
         query = """
