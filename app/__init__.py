@@ -20,11 +20,6 @@ def create_app(config_class=Config):
 
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
 
-    with app.app_context():
-        from app.utils.init_load_db import init_load_db
-
-        init_load_db(db)
-
     return app
 
 
