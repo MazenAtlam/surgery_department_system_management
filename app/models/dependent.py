@@ -13,6 +13,7 @@ class Dependent(BaseModel):
         super().__init__(**kwargs)
 
     dependent_name: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False)
+    relationship: so.Mapped[str] = so.mapped_column(sa.String(50), nullable=False)
     dependent_phone_number: so.Mapped[str] = so.mapped_column(
         sa.String(50), nullable=False
     )

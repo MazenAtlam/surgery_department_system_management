@@ -55,8 +55,11 @@ class User(BaseModel, PasswordMixin, UserMixin):
     phone_numbers: so.Mapped[List["m.PhoneNumber"]] = so.relationship(
         "PhoneNumber", back_populates="user"
     )
+    pic_id: so.Mapped[str] = so.mapped_column(
+        sa.ForeignKey("uploaded_files.id"), nullable=False
+    )
     _pic: so.Mapped["m.UploadedFile"] = so.relationship(
-        "UploadedFile", back_populates="user", uselist=False
+        "UploadedFile", back_populates="user", uselist=False, foreign_keys=[pic_id]
     )
     patient: so.Mapped[Optional["m.Patient"]] = so.relationship(
         "Patient", back_populates="user", uselist=False
