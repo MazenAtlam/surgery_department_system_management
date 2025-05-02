@@ -1,32 +1,32 @@
-from flask_jwt_extended import create_access_token
-from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
 
+from flask_jwt_extended import create_access_token
+from werkzeug.security import check_password_hash
+
+import app.models as m
 from app import db
-from app.models.user import User
 
 
 def register_user(user_data):
     # Check if user exists
-    if User.query.filter_by(email=user_data["email"]).first():
+    if m.User.query.filter_by(email=user_data["email"]).first():
         return {"success": False, "message": "Email already registered"}
 
-    from app.models import Role
-
-    role_id = Role.query.filter_by(name="Patient").first().id
-
-    from datetime import datetime
+    role_id = m.Role.query.filter_by(name="Patient").first().id
 
     # Convert string to date object
     dob_str = user_data["dob"]  # This comes from your input data
     dob = datetime.strptime(dob_str, "%d-%m-%Y").date()
 
+    gender: str = user_data["gender"][0].upper()  # 'M' or 'F'
+
     # Create new user
-    new_user = User(
+    new_user = m.User(
         email=user_data["email"],
         password=user_data["password"],
         name=user_data["name"],
         ssn=user_data["ssn"],
-        gender=user_data["gender"],
+        gender=gender,
         dob=dob,
         role_id=role_id,
     )
@@ -45,7 +45,7 @@ def register_user(user_data):
 
 
 def login_user(login_data):
-    user = User.query.filter_by(email=login_data["email"]).first()
+    user = m.User.query.filter_by(email=login_data["email"]).first()
 
     if not user or not check_password_hash(user.password_hash, login_data["password"]):
         return {"success": False, "message": "Invalid email or password"}
