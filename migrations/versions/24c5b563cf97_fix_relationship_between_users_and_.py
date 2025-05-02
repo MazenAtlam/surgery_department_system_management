@@ -1,8 +1,8 @@
-"""fresh start
+"""fix relationship between users and uploaded_files
 
-Revision ID: d503e6a0e85c
+Revision ID: 24c5b563cf97
 Revises: 
-Create Date: 2025-05-02 18:55:30.571764
+Create Date: 2025-05-02 22:18:34.129037
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "d503e6a0e85c"
+revision = "24c5b563cf97"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -47,6 +47,21 @@ def upgrade():
         batch_op.create_index(batch_op.f("ix_roles_id"), ["id"], unique=False)
 
     op.create_table(
+        "uploaded_files",
+        sa.Column("file_name", sa.String(length=100), nullable=False),
+        sa.Column("file_url", sa.String(length=256), nullable=False),
+        sa.Column("file_type", sa.String(length=10), nullable=False),
+        sa.Column("file_size", sa.Float(), nullable=False),
+        sa.Column("id", sa.String(length=128), nullable=False),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.Column("deleted_at", sa.DateTime(), nullable=True),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    with op.batch_alter_table("uploaded_files", schema=None) as batch_op:
+        batch_op.create_index(batch_op.f("ix_uploaded_files_id"), ["id"], unique=False)
+
+    op.create_table(
         "medical_devices",
         sa.Column("medical_device_name", sa.String(), nullable=False),
         sa.Column("department_id", sa.String(length=128), nullable=False),
@@ -77,10 +92,15 @@ def upgrade():
         sa.Column("email", sa.String(length=120), nullable=False),
         sa.Column("password_hash", sa.String(length=256), nullable=False),
         sa.Column("role_id", sa.String(length=128), nullable=False),
+        sa.Column("pic_id", sa.String(length=128), nullable=False),
         sa.Column("id", sa.String(length=128), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.Column("deleted_at", sa.DateTime(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["pic_id"],
+            ["uploaded_files.id"],
+        ),
         sa.ForeignKeyConstraint(
             ["role_id"],
             ["roles.id"],
@@ -196,26 +216,6 @@ def upgrade():
     )
     with op.batch_alter_table("rooms", schema=None) as batch_op:
         batch_op.create_index(batch_op.f("ix_rooms_id"), ["id"], unique=False)
-
-    op.create_table(
-        "uploaded_files",
-        sa.Column("user_id", sa.String(length=128), nullable=False),
-        sa.Column("file_name", sa.String(length=100), nullable=False),
-        sa.Column("file_url", sa.String(length=256), nullable=False),
-        sa.Column("file_type", sa.String(length=10), nullable=False),
-        sa.Column("file_size", sa.Float(), nullable=False),
-        sa.Column("id", sa.String(length=128), nullable=False),
-        sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.Column("updated_at", sa.DateTime(), nullable=False),
-        sa.Column("deleted_at", sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(
-            ["user_id"],
-            ["users.id"],
-        ),
-        sa.PrimaryKeyConstraint("id"),
-    )
-    with op.batch_alter_table("uploaded_files", schema=None) as batch_op:
-        batch_op.create_index(batch_op.f("ix_uploaded_files_id"), ["id"], unique=False)
 
     op.create_table(
         "appointments",
@@ -361,10 +361,6 @@ def downgrade():
         batch_op.drop_index(batch_op.f("ix_appointments_id"))
 
     op.drop_table("appointments")
-    with op.batch_alter_table("uploaded_files", schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f("ix_uploaded_files_id"))
-
-    op.drop_table("uploaded_files")
     with op.batch_alter_table("rooms", schema=None) as batch_op:
         batch_op.drop_index(batch_op.f("ix_rooms_id"))
 
@@ -397,6 +393,10 @@ def downgrade():
         batch_op.drop_index(batch_op.f("ix_medical_devices_id"))
 
     op.drop_table("medical_devices")
+    with op.batch_alter_table("uploaded_files", schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f("ix_uploaded_files_id"))
+
+    op.drop_table("uploaded_files")
     with op.batch_alter_table("roles", schema=None) as batch_op:
         batch_op.drop_index(batch_op.f("ix_roles_id"))
 

@@ -14,11 +14,8 @@ class UploadedFile(BaseModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    user_id: so.Mapped[str] = so.mapped_column(
-        sa.ForeignKey("users.id"), nullable=False
-    )
     user: so.Mapped["m.User"] = so.relationship(
-        "User", back_populates="_pic", foreign_keys=[user_id]
+        "User", back_populates="_pic", uselist=False
     )
     file_name: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False)
     file_url: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=False)
