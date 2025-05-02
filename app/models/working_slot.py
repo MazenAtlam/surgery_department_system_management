@@ -24,6 +24,9 @@ class WorkingSlot(BaseModel):
         sa.CheckConstraint("end_time > start_time", name="check_time_validity"),
     )
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     doctor_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("doctors.id"), index=True, nullable=False
     )

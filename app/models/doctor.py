@@ -13,6 +13,9 @@ class Doctor(BaseModel):
     __abstract__ = False
     __tablename__ = "doctors"
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     years_of_experience: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=False)
     salary: so.Mapped[float] = so.mapped_column(sa.Float, nullable=False)
     date_of_hire: so.Mapped[date] = so.mapped_column(sa.Date, nullable=False)

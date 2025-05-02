@@ -21,8 +21,22 @@ class User(BaseModel, PasswordMixin, UserMixin):
             passwd (str): Password for the doctor
             **kwargs: Arbitrary keyword arguments
         """
+        relationship_fields = [
+            "role",
+            "_pic",
+            "phone_numbers",
+            "patients",
+            "doctors",
+            "admins",
+        ]
+        model_kwargs = {k: v for k, v in kwargs.items() if k not in relationship_fields}
+        super().__init__(**model_kwargs)
+
         PasswordMixin.__init__(self, password)
-        super().__init__(**kwargs)
+
+        for field in relationship_fields:
+            if field in kwargs:
+                setattr(self, field, kwargs[field])
 
     name: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False, index=True)
     gender: so.Mapped[str] = so.mapped_column(
@@ -40,9 +54,6 @@ class User(BaseModel, PasswordMixin, UserMixin):
     role: so.Mapped["m.Role"] = so.relationship("Role", back_populates="users")
     phone_numbers: so.Mapped[List["m.PhoneNumber"]] = so.relationship(
         "PhoneNumber", back_populates="user"
-    )
-    pic_id: so.Mapped[str] = so.mapped_column(
-        sa.ForeignKey("uploaded_files.id"), nullable=True
     )
     _pic: so.Mapped["m.UploadedFile"] = so.relationship(
         "UploadedFile", back_populates="user", uselist=False

@@ -8,6 +8,10 @@ from .base_model import BaseModel
 
 class Appointment(BaseModel):
     __tablename__ = "appointments"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     patient_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("patients.id"), nullable=False
     )
@@ -23,7 +27,7 @@ class Appointment(BaseModel):
     appointment_date_time: so.Mapped[str] = so.mapped_column(
         sa.DateTime, nullable=False
     )
-    room_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("room.id"))
+    room_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("rooms.id"))
     room: so.Mapped["m.Room"] = so.relationship("Room", back_populates="appointments")
     file_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("uploaded_files.id"))
     file: so.Mapped["m.UploadedFile"] = so.relationship(

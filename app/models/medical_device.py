@@ -8,6 +8,10 @@ from .base_model import BaseModel
 
 class MedicalDevice(BaseModel):
     __tablename__ = "medical_devices"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     medical_device_name: so.Mapped[str] = so.mapped_column(unique=True)
     department_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("departments.id"))
 

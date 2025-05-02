@@ -9,6 +9,10 @@ from .base_model import BaseModel
 
 class Department(BaseModel):
     __tablename__ = "departments"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     department_name: so.Mapped[str] = so.mapped_column(unique=True)
     department_location: so.Mapped[str] = so.mapped_column(unique=True)
     rooms: so.Mapped[List["m.Room"]] = so.relationship(

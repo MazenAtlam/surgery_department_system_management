@@ -9,6 +9,9 @@ from .base_model import BaseModel
 class Dependent(BaseModel):
     __tablename__ = "dependents"
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     dependent_name: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False)
     dependent_phone_number: so.Mapped[str] = so.mapped_column(
         sa.String(50), nullable=False

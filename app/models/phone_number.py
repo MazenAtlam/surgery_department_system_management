@@ -9,6 +9,9 @@ from .base_model import BaseModel
 class PhoneNumber(BaseModel):
     __tablename__ = "phone_numbers"
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     user_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("users.id"), nullable=False
     )
