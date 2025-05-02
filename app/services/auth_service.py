@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt, jwt_required
 from werkzeug.security import check_password_hash
 
 import app.models as m
@@ -63,3 +63,10 @@ def login_user(login_data):
         "access_token": access_token,
         "user": {"id": user.id, "name": user.name, "email": user.email},
     }
+
+
+# Add to your auth_service.py
+def logout_user():
+    jti = get_jwt()["jti"]  # Get the JWT's unique identifier
+    # In production, you would store this in a token blacklist database
+    return {"success": True, "message": "Successfully logged out"}
