@@ -7,11 +7,6 @@ from app.services.auth_service import login_user, register_user
 auth_bp = Blueprint("auth", __name__)
 
 
-@auth_bp.route("/test")
-def test():
-    return "Hello World", 200
-
-
 @auth_bp.route("/register", methods=["POST"])
 def register():
     data = request.get_json()

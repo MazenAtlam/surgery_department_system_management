@@ -9,6 +9,9 @@ from .base_model import BaseModel
 class MedicalHistory(BaseModel):
     __tablename__ = "medical_history"
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     name: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False, index=True)
     family_history: so.Mapped[bool] = so.mapped_column(sa.Boolean, nullable=True)
     patient_id: so.Mapped[str] = so.mapped_column(

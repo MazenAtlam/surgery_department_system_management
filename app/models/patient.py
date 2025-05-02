@@ -12,6 +12,9 @@ class Patient(BaseModel):
     __abstract__ = False
     __tablename__ = "patients"
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     medical_history: so.Mapped[List["m.MedicalHistory"]] = so.relationship(
         "MedicalHistory", back_populates="patient"
     )

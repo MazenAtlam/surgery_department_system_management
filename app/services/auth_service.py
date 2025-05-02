@@ -10,15 +10,25 @@ def register_user(user_data):
     if User.query.filter_by(email=user_data["email"]).first():
         return {"success": False, "message": "Email already registered"}
 
+    from app.models import Role
+
+    role_id = Role.query.filter_by(name="Patient").first().id
+
+    from datetime import datetime
+
+    # Convert string to date object
+    dob_str = user_data["dob"]  # This comes from your input data
+    dob = datetime.strptime(dob_str, "%d-%m-%Y").date()
+
     # Create new user
     new_user = User(
         email=user_data["email"],
-        password_hash=generate_password_hash(user_data["password"]),
+        password=user_data["password"],
         name=user_data["name"],
         ssn=user_data["ssn"],
         gender=user_data["gender"],
-        dob=user_data["dob"],
-        role="patient",
+        dob=dob,
+        role_id=role_id,
     )
 
     db.session.add(new_user)
@@ -47,5 +57,5 @@ def login_user(login_data):
         "success": True,
         "message": "Login successful",
         "access_token": access_token,
-        "user": {"id": user.id, "username": user.username, "email": user.email},
+        "user": {"id": user.id, "name": user.name, "email": user.email},
     }

@@ -9,7 +9,11 @@ from .base_model import BaseModel
 
 
 class Room(BaseModel):
-    __tablename__ = "room"
+    __tablename__ = "rooms"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     room_location: so.Mapped[str] = so.mapped_column(unique=True)
     room_device_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("medical_devices.id"), unique=True
