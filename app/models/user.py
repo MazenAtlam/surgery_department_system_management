@@ -1,5 +1,5 @@
 from datetime import date
-from typing import List
+from typing import List, Optional
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
@@ -58,13 +58,13 @@ class User(BaseModel, PasswordMixin, UserMixin):
     _pic: so.Mapped["m.UploadedFile"] = so.relationship(
         "UploadedFile", back_populates="user", uselist=False
     )
-    patients: so.Mapped[List["m.Patient"]] = so.relationship(
+    patient: so.Mapped[Optional["m.Patient"]] = so.relationship(
         "Patient", back_populates="user", uselist=False
     )
-    doctors: so.Mapped[List["m.Doctor"]] = so.relationship(
+    doctor: so.Mapped[Optional["m.Doctor"]] = so.relationship(
         "Doctor", back_populates="user", uselist=False
     )
-    admins: so.Mapped[List["m.Admin"]] = so.relationship(
+    admin: so.Mapped[Optional["m.Admin"]] = so.relationship(
         "Admin", back_populates="user", uselist=False
     )
 

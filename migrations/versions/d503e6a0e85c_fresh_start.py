@@ -1,18 +1,17 @@
-"""Fixing models creation
+"""fresh start
 
-Revision ID: de7ceadd0f5b
-Revises: dfcfb6f1687e
-Create Date: 2025-05-02 01:12:41.219126
+Revision ID: d503e6a0e85c
+Revises: 
+Create Date: 2025-05-02 18:55:30.571764
 
 """
-
 from alembic import op
 import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "de7ceadd0f5b"
-down_revision = "dfcfb6f1687e"
+revision = "d503e6a0e85c"
+down_revision = None
 branch_labels = None
 depends_on = None
 
@@ -48,43 +47,40 @@ def upgrade():
         batch_op.create_index(batch_op.f("ix_roles_id"), ["id"], unique=False)
 
     op.create_table(
-        "uploaded_files",
-        sa.Column("user_id", sa.String(length=128), nullable=False),
-        sa.Column("file_name", sa.String(), nullable=False),
-        sa.Column("file_url", sa.String(), nullable=False),
-        sa.Column("file_type", sa.String(), nullable=False),
-        sa.Column("file_size", sa.Float(), nullable=False),
+        "medical_devices",
+        sa.Column("medical_device_name", sa.String(), nullable=False),
+        sa.Column("department_id", sa.String(length=128), nullable=False),
+        sa.Column("medical_device_price", sa.Float(), nullable=False),
+        sa.Column("medical_device_state", sa.String(), nullable=False),
         sa.Column("id", sa.String(length=128), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.Column("deleted_at", sa.DateTime(), nullable=True),
         sa.ForeignKeyConstraint(
-            ["user_id"],
-            ["users.id"],
+            ["department_id"],
+            ["departments.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("medical_device_name"),
+        sa.UniqueConstraint("medical_device_price"),
+        sa.UniqueConstraint("medical_device_state"),
     )
-    with op.batch_alter_table("uploaded_files", schema=None) as batch_op:
-        batch_op.create_index(batch_op.f("ix_uploaded_files_id"), ["id"], unique=False)
+    with op.batch_alter_table("medical_devices", schema=None) as batch_op:
+        batch_op.create_index(batch_op.f("ix_medical_devices_id"), ["id"], unique=False)
 
     op.create_table(
         "users",
         sa.Column("name", sa.String(length=100), nullable=False),
         sa.Column("gender", sa.Enum("M", "F", name="gender_enum"), nullable=False),
         sa.Column("ssn", sa.Integer(), nullable=False),
-        sa.Column("dob", sa.Date(), nullable=True),
+        sa.Column("dob", sa.Date(), nullable=False),
         sa.Column("email", sa.String(length=120), nullable=False),
         sa.Column("password_hash", sa.String(length=256), nullable=False),
         sa.Column("role_id", sa.String(length=128), nullable=False),
-        sa.Column("pic_id", sa.String(length=128), nullable=True),
         sa.Column("id", sa.String(length=128), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.Column("deleted_at", sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(
-            ["pic_id"],
-            ["uploaded_files.id"],
-        ),
         sa.ForeignKeyConstraint(
             ["role_id"],
             ["roles.id"],
@@ -111,12 +107,10 @@ def upgrade():
             ["users.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("user_id"),
     )
     with op.batch_alter_table("admins", schema=None) as batch_op:
         batch_op.create_index(batch_op.f("ix_admins_id"), ["id"], unique=False)
-        batch_op.create_index(
-            batch_op.f("ix_admins_user_id"), ["user_id"], unique=False
-        )
 
     op.create_table(
         "doctors",
@@ -139,34 +133,10 @@ def upgrade():
             ["users.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("user_id"),
     )
     with op.batch_alter_table("doctors", schema=None) as batch_op:
         batch_op.create_index(batch_op.f("ix_doctors_id"), ["id"], unique=False)
-        batch_op.create_index(
-            batch_op.f("ix_doctors_user_id"), ["user_id"], unique=False
-        )
-
-    op.create_table(
-        "medical_devices",
-        sa.Column("medical_device_name", sa.String(), nullable=False),
-        sa.Column("department_id", sa.String(length=128), nullable=False),
-        sa.Column("medical_device_price", sa.Float(), nullable=False),
-        sa.Column("medical_device_state", sa.String(), nullable=False),
-        sa.Column("id", sa.String(length=128), nullable=False),
-        sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.Column("updated_at", sa.DateTime(), nullable=False),
-        sa.Column("deleted_at", sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(
-            ["department_id"],
-            ["departments.id"],
-        ),
-        sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("medical_device_name"),
-        sa.UniqueConstraint("medical_device_price"),
-        sa.UniqueConstraint("medical_device_state"),
-    )
-    with op.batch_alter_table("medical_devices", schema=None) as batch_op:
-        batch_op.create_index(batch_op.f("ix_medical_devices_id"), ["id"], unique=False)
 
     op.create_table(
         "patients",
@@ -180,12 +150,10 @@ def upgrade():
             ["users.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("user_id"),
     )
     with op.batch_alter_table("patients", schema=None) as batch_op:
         batch_op.create_index(batch_op.f("ix_patients_id"), ["id"], unique=False)
-        batch_op.create_index(
-            batch_op.f("ix_patients_user_id"), ["user_id"], unique=False
-        )
 
     op.create_table(
         "phone_numbers",
@@ -204,6 +172,82 @@ def upgrade():
     )
     with op.batch_alter_table("phone_numbers", schema=None) as batch_op:
         batch_op.create_index(batch_op.f("ix_phone_numbers_id"), ["id"], unique=False)
+
+    op.create_table(
+        "rooms",
+        sa.Column("room_location", sa.String(), nullable=False),
+        sa.Column("room_device_id", sa.String(length=128), nullable=False),
+        sa.Column("department_id", sa.String(length=128), nullable=False),
+        sa.Column("id", sa.String(length=128), nullable=False),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.Column("deleted_at", sa.DateTime(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["department_id"],
+            ["departments.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["room_device_id"],
+            ["medical_devices.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("room_device_id"),
+        sa.UniqueConstraint("room_location"),
+    )
+    with op.batch_alter_table("rooms", schema=None) as batch_op:
+        batch_op.create_index(batch_op.f("ix_rooms_id"), ["id"], unique=False)
+
+    op.create_table(
+        "uploaded_files",
+        sa.Column("user_id", sa.String(length=128), nullable=False),
+        sa.Column("file_name", sa.String(length=100), nullable=False),
+        sa.Column("file_url", sa.String(length=256), nullable=False),
+        sa.Column("file_type", sa.String(length=10), nullable=False),
+        sa.Column("file_size", sa.Float(), nullable=False),
+        sa.Column("id", sa.String(length=128), nullable=False),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.Column("deleted_at", sa.DateTime(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["user_id"],
+            ["users.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    with op.batch_alter_table("uploaded_files", schema=None) as batch_op:
+        batch_op.create_index(batch_op.f("ix_uploaded_files_id"), ["id"], unique=False)
+
+    op.create_table(
+        "appointments",
+        sa.Column("patient_id", sa.String(length=128), nullable=False),
+        sa.Column("doctor_id", sa.String(length=128), nullable=False),
+        sa.Column("appointment_date_time", sa.DateTime(), nullable=False),
+        sa.Column("room_id", sa.String(length=128), nullable=False),
+        sa.Column("file_id", sa.String(length=128), nullable=False),
+        sa.Column("id", sa.String(length=128), nullable=False),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.Column("deleted_at", sa.DateTime(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["doctor_id"],
+            ["doctors.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["file_id"],
+            ["uploaded_files.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["patient_id"],
+            ["patients.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["room_id"],
+            ["rooms.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    with op.batch_alter_table("appointments", schema=None) as batch_op:
+        batch_op.create_index(batch_op.f("ix_appointments_id"), ["id"], unique=False)
 
     op.create_table(
         "dependents",
@@ -248,30 +292,6 @@ def upgrade():
         )
 
     op.create_table(
-        "room",
-        sa.Column("room_location", sa.String(), nullable=False),
-        sa.Column("room_device_id", sa.String(length=128), nullable=False),
-        sa.Column("department_id", sa.String(length=128), nullable=False),
-        sa.Column("id", sa.String(length=128), nullable=False),
-        sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.Column("updated_at", sa.DateTime(), nullable=False),
-        sa.Column("deleted_at", sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(
-            ["department_id"],
-            ["departments.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["room_device_id"],
-            ["medical_devices.id"],
-        ),
-        sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("room_device_id"),
-        sa.UniqueConstraint("room_location"),
-    )
-    with op.batch_alter_table("room", schema=None) as batch_op:
-        batch_op.create_index(batch_op.f("ix_room_id"), ["id"], unique=False)
-
-    op.create_table(
         "working_slots",
         sa.Column("doctor_id", sa.String(length=128), nullable=False),
         sa.Column("start_time", sa.Time(), nullable=False),
@@ -314,47 +334,11 @@ def upgrade():
             batch_op.f("ix_working_slots_start_time"), ["start_time"], unique=False
         )
 
-    op.create_table(
-        "appointments",
-        sa.Column("patient_id", sa.String(length=128), nullable=False),
-        sa.Column("doctor_id", sa.String(length=128), nullable=False),
-        sa.Column("appointment_date_time", sa.DateTime(), nullable=False),
-        sa.Column("room_id", sa.String(length=128), nullable=False),
-        sa.Column("file_id", sa.String(length=128), nullable=False),
-        sa.Column("id", sa.String(length=128), nullable=False),
-        sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.Column("updated_at", sa.DateTime(), nullable=False),
-        sa.Column("deleted_at", sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(
-            ["doctor_id"],
-            ["doctors.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["file_id"],
-            ["uploaded_files.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["patient_id"],
-            ["patients.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["room_id"],
-            ["room.id"],
-        ),
-        sa.PrimaryKeyConstraint("id"),
-    )
-    with op.batch_alter_table("appointments", schema=None) as batch_op:
-        batch_op.create_index(batch_op.f("ix_appointments_id"), ["id"], unique=False)
-
     # ### end Alembic commands ###
 
 
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
-    with op.batch_alter_table("appointments", schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f("ix_appointments_id"))
-
-    op.drop_table("appointments")
     with op.batch_alter_table("working_slots", schema=None) as batch_op:
         batch_op.drop_index(batch_op.f("ix_working_slots_start_time"))
         batch_op.drop_index(batch_op.f("ix_working_slots_id"))
@@ -363,10 +347,6 @@ def downgrade():
         batch_op.drop_index(batch_op.f("ix_working_slots_day"))
 
     op.drop_table("working_slots")
-    with op.batch_alter_table("room", schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f("ix_room_id"))
-
-    op.drop_table("room")
     with op.batch_alter_table("medical_history", schema=None) as batch_op:
         batch_op.drop_index(batch_op.f("ix_medical_history_patient_id"))
         batch_op.drop_index(batch_op.f("ix_medical_history_name"))
@@ -377,26 +357,31 @@ def downgrade():
         batch_op.drop_index(batch_op.f("ix_dependents_id"))
 
     op.drop_table("dependents")
+    with op.batch_alter_table("appointments", schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f("ix_appointments_id"))
+
+    op.drop_table("appointments")
+    with op.batch_alter_table("uploaded_files", schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f("ix_uploaded_files_id"))
+
+    op.drop_table("uploaded_files")
+    with op.batch_alter_table("rooms", schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f("ix_rooms_id"))
+
+    op.drop_table("rooms")
     with op.batch_alter_table("phone_numbers", schema=None) as batch_op:
         batch_op.drop_index(batch_op.f("ix_phone_numbers_id"))
 
     op.drop_table("phone_numbers")
     with op.batch_alter_table("patients", schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f("ix_patients_user_id"))
         batch_op.drop_index(batch_op.f("ix_patients_id"))
 
     op.drop_table("patients")
-    with op.batch_alter_table("medical_devices", schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f("ix_medical_devices_id"))
-
-    op.drop_table("medical_devices")
     with op.batch_alter_table("doctors", schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f("ix_doctors_user_id"))
         batch_op.drop_index(batch_op.f("ix_doctors_id"))
 
     op.drop_table("doctors")
     with op.batch_alter_table("admins", schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f("ix_admins_user_id"))
         batch_op.drop_index(batch_op.f("ix_admins_id"))
 
     op.drop_table("admins")
@@ -408,10 +393,10 @@ def downgrade():
         batch_op.drop_index(batch_op.f("ix_users_email"))
 
     op.drop_table("users")
-    with op.batch_alter_table("uploaded_files", schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f("ix_uploaded_files_id"))
+    with op.batch_alter_table("medical_devices", schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f("ix_medical_devices_id"))
 
-    op.drop_table("uploaded_files")
+    op.drop_table("medical_devices")
     with op.batch_alter_table("roles", schema=None) as batch_op:
         batch_op.drop_index(batch_op.f("ix_roles_id"))
 
