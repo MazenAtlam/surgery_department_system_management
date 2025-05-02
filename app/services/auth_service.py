@@ -14,6 +14,9 @@ def register_user(user_data):
 
     role_id = m.Role.query.filter_by(name="Patient").first().id
 
+    # Create new patient
+    new_patient = m.Patient()
+
     # Convert string to date object
     dob_str = user_data["dob"]  # This comes from your input data
     dob = datetime.strptime(dob_str, "%d-%m-%Y").date()
@@ -29,6 +32,7 @@ def register_user(user_data):
         gender=gender,
         dob=dob,
         role_id=role_id,
+        patient_id=new_patient.id,
     )
 
     db.session.add(new_user)
