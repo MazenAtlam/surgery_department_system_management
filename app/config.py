@@ -5,14 +5,21 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = (
-        os.environ.get("SECRET_KEY") or "m6Mqvd1RWQE6v3WdYnHUHfBNXHxOxLoSWhj-PW8Z0eQ"
+        os.environ.get("SECRET_KEY")
     )
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL"
-    ) or "sqlite:///" + os.path.join(basedir, "data.sqlite")
+
+    username = os.environ.get("USERNAME")
+    password = os.environ.get("PASSWORD")
+    host = os.environ.get("HOST")
+    dbname = os.environ.get("DATABASE_NAME")
+
+    SQLALCHEMY_DATABASE_URI = "postgresql://" + \
+                              username + ":" + \
+                              password + "@" + \
+                              host + "/" + dbname + \
+                              "?sslmode=require"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = (
         os.environ.get("JWT_SECRET_KEY")
-        or "ereteyubcgdhfjmazensherifahmedmostafa##$$%^djyfgjidigp0-ititjgj"
     )
-    JWT_ACCESS_TOKEN_EXPIRES = 3600
+    JWT_ACCESS_TOKEN_EXPIRES = os.environ.get("JWT_ACCESS_TOKEN_EXPIRES")
