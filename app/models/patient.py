@@ -24,7 +24,3 @@ class Patient(BaseModel):
     appointments: so.Mapped[List["m.Appointment"]] = so.relationship(
         "Appointment", back_populates="patient"
     )
-    user_id: so.Mapped[str] = so.mapped_column(
-        sa.ForeignKey("users.id"), nullable=False, index=True
-    )
-    user: so.Mapped["m.User"] = so.relationship("User", back_populates="patients")

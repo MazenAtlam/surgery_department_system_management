@@ -58,14 +58,23 @@ class User(BaseModel, PasswordMixin, UserMixin):
     _pic: so.Mapped["m.UploadedFile"] = so.relationship(
         "UploadedFile", back_populates="user", uselist=False
     )
-    patients: so.Mapped[List["m.Patient"]] = so.relationship(
-        "Patient", back_populates="user", uselist=False
+    patient_id: so.Mapped[str] = so.mapped_column(
+        sa.ForeignKey("patients.id"), unique=True, nullable=True, index=True
     )
-    doctors: so.Mapped[List["m.Doctor"]] = so.relationship(
-        "Doctor", back_populates="user", uselist=False
+    patient: so.Mapped["m.Patient"] = so.relationship(
+        "Patient", back_populates="user", uselist=True
     )
-    admins: so.Mapped[List["m.Admin"]] = so.relationship(
-        "Admin", back_populates="user", uselist=False
+    doctor_id: so.Mapped[str] = so.mapped_column(
+        sa.ForeignKey("doctors.id"), unique=True, nullable=True, index=True
+    )
+    doctor: so.Mapped["m.Doctor"] = so.relationship(
+        "Doctor", back_populates="user", uselist=True
+    )
+    admin_id: so.Mapped[str] = so.mapped_column(
+        sa.ForeignKey("admins.id"), unique=True, nullable=True, index=True
+    )
+    admin: so.Mapped["m.Admin"] = so.relationship(
+        "Admin", back_populates="user", uselist=True
     )
 
     @hybrid_property
