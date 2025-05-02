@@ -22,6 +22,7 @@ def create_app(config_class=Config):
 
     with app.app_context():
         from app.utils.init_load_db import init_load_db
+
         init_load_db(db)
 
     return app
