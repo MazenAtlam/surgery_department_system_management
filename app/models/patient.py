@@ -28,6 +28,4 @@ class Patient(BaseModel):
     user_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("users.id"), nullable=False, unique=True
     )
-    user: so.Mapped["m.User"] = so.relationship(
-        "User", back_populates="patient"
-    )
+    user: so.Mapped["m.User"] = so.relationship("User", back_populates="patient")
