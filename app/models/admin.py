@@ -14,3 +14,10 @@ class Admin(BaseModel):
         super().__init__(**kwargs)
 
     is_superadmin: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=False)
+
+    user_id: so.Mapped[str] = so.mapped_column(
+        sa.ForeignKey("users.id"), nullable=False, unique=True
+    )
+    user: so.Mapped["m.User"] = so.relationship(
+        "User", back_populates="admin"
+    )
