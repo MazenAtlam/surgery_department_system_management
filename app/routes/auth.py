@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from app.models.user import User
-from app.services.auth_service import login_user, register_user
+from app.services.auth_service import login_user, logout_user, register_user
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -35,3 +35,10 @@ def protected():
         ),
         200,
     )
+
+
+@auth_bp.route("/logout", methods=["DELETE"])
+@jwt_required()
+def logout():
+    result = logout_user()
+    return jsonify(result), 200

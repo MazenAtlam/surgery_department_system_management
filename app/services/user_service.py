@@ -1,56 +1,58 @@
 import sqlite3
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 from flask import current_app
 
 from app.config import Config
 
 
-def get_user_data_by_id(user_id: int) -> Optional[Dict]:
+def get_user_data_by_id(user_id: str) -> Optional[Dict]:
     """
-    Fetch detailed user data by ID using raw SQL.
+    Fetch comprehensive user data by ID including phone numbers and profile picture.
 
     Args:
-        user_id (int): The ID of the user to retrieve.
+        user_id (str): The ID of the user to retrieve (e.g., 'user1')
 
     Returns:
-        dict: User data with medical history and photo URL if found, else None.
+        dict: User data with phone numbers (as list) and picture URL if found, else None.
     """
     conn = None
     try:
-
         conn = sqlite3.connect(Config.SQLALCHEMY_DATABASE_URI)
-        conn.row_factory = sqlite3.Row  # Return rows as dictionaries
+        conn.row_factory = sqlite3.Row
 
         query = """
-                SELECT u.user_id, \
-                       u.name, \
-                       DATE_PART('year', AGE(CURRENT_DATE, u.dob)) AS age, \
-                       u.phone_num, \
-                       u.gender, \
+                SELECT u.name, \
                        u.email, \
-                       pf.file_url                                 AS photo_url, \
-                       mh.history_id, \
-                       mh.family_history, \
-                       mh.disease_name
-                FROM "user" AS u
-                         JOIN patient AS p ON p.user_id = u.user_id
-                         LEFT JOIN (SELECT DISTINCT \
-                                    ON (patient_id) \
-                                        patient_id, \
-                                        file_url \
-                                    FROM files \
-                                    WHERE file_type = 'photo' \
-                                    ORDER BY patient_id, upload_time DESC) AS pf ON pf.patient_id = p.patient_id
-                         LEFT JOIN medical_history AS mh ON mh.patient_id = p.patient_id
-                WHERE u.user_id = ? \
+                       CAST((julianday('now') - julianday(u.dob)) / 365 AS INTEGER)                                       AS age, \
+                       u.ssn, \
+                       u.gender, \
+                       GROUP_CONCAT(pn.number)                                                                            AS phone_numbers, \
+                       COALESCE(uf.file_url, \
+                                (SELECT file_url FROM uploaded_files WHERE file_name = 'default.png' LIMIT 1)
+            ) AS picture_url
+                FROM users u \
+                         LEFT JOIN phone_numbers pn ON u.id = pn.user_id \
+                         LEFT JOIN uploaded_files uf ON u.pic_id = uf.id
+                WHERE u.id = ?
+                GROUP BY u.id, u.name, u.email, u.dob, u.ssn, u.gender, uf.file_url \
                 """
 
         cursor = conn.cursor()
         cursor.execute(query, (user_id,))
         result = cursor.fetchone()
 
-        return dict(result) if result else None
+        if result:
+            # Convert SQLite result to dict and process phone numbers
+            user_data = dict(result)
+            if user_data["phone_numbers"]:
+                user_data["phone_numbers"]: List[str] = user_data[
+                    "phone_numbers"
+                ].split(",")
+            else:
+                user_data["phone_numbers"]: List[str] = []
+            return user_data
+        return None
 
     except sqlite3.Error as e:
         current_app.logger.error(f"Database error in get_user_data_by_id: {e}")
@@ -58,46 +60,3 @@ def get_user_data_by_id(user_id: int) -> Optional[Dict]:
     finally:
         if conn:
             conn.close()
-
-
-# from flask import current_app
-# import sqlite3
-#
-#
-# def get_user_data_by_id(id):
-#     """
-#     Retrieve a user by email using raw SQL commands
-#
-#     Args:
-#         email (str): The email address to search for
-#
-#     Returns:
-#         dict: User data if found, None otherwise
-#     """
-#     conn = None
-#     try:
-#         # Get the database path from Flask config
-#         db_path = current_app.config.get('DATABASE_URI', 'data.sqlite')
-#
-#         # Connect to the SQLite database
-#         conn = sqlite3.connect(db_path)
-#         conn.row_factory = sqlite3.Row  # To get results as dictionaries
-#
-#         # Create a cursor object
-#         cursor = conn.cursor()
-#
-#         # Execute the SQL query with parameterized input to prevent SQL injection
-#         cursor.execute("SELECT * FROM users WHERE email = ?", (id,))
-#
-#         # Fetch the result
-#         user = cursor.fetchone()
-#
-#         # Return as dict if found
-#         return dict(user) if user else None
-#
-#     except sqlite3.Error as e:
-#         current_app.logger.error(f"Database error: {e}")
-#         return None
-#     finally:
-#         if conn:
-#             conn.close()
