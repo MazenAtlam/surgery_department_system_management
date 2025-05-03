@@ -42,7 +42,7 @@ class User(BaseModel, PasswordMixin, UserMixin):
     gender: so.Mapped[str] = so.mapped_column(
         sa.Enum("M", "F", name="gender_enum"), nullable=False
     )
-    ssn: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=False, index=True)
+    ssn: so.Mapped[str] = so.mapped_column(sa.String(14), nullable=False, index=True)
     dob: so.Mapped[date] = so.mapped_column(sa.Date, nullable=False)
     email: so.Mapped[str] = so.mapped_column(
         sa.String(120), unique=True, nullable=False, index=True

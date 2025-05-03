@@ -12,11 +12,11 @@ class MedicalDevice(BaseModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    medical_device_name: so.Mapped[str] = so.mapped_column(unique=True)
-    department_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("departments.id"))
+    medical_device_name: so.Mapped[str] = so.mapped_column(sa.String(30), nullable=False)
+    room_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("rooms.id"), nullable=False)
 
-    department: so.Mapped["m.Department"] = so.relationship(
-        "Department", back_populates="medical_devices"
+    room: so.Mapped["m.Room"] = so.relationship(
+        "Room", back_populates="medical_devices"
     )
-    medical_device_price: so.Mapped[float] = so.mapped_column(unique=True)
-    medical_device_state: so.Mapped[str] = so.mapped_column(unique=True)
+    medical_device_price: so.Mapped[float] = so.mapped_column(sa.Float, nullable=False)
+    medical_device_state: so.Mapped[str] = so.mapped_column(sa.String(30))

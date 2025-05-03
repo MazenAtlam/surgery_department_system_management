@@ -15,7 +15,7 @@ class Dependent(BaseModel):
     dependent_name: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False)
     relationship: so.Mapped[str] = so.mapped_column(sa.String(50), nullable=False)
     dependent_phone_number: so.Mapped[str] = so.mapped_column(
-        sa.String(50), nullable=False
+        sa.String(11), nullable=False
     )
     patient_id: so.Mapped[str] = so.mapped_column(
         sa.ForeignKey("patients.id"), nullable=False

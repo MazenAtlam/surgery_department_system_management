@@ -14,12 +14,13 @@ class Room(BaseModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    room_location: so.Mapped[str] = so.mapped_column(unique=True)
-    room_device_id: so.Mapped[str] = so.mapped_column(
-        sa.ForeignKey("medical_devices.id"), unique=True
+    room_location: so.Mapped[str] = so.mapped_column(unique=True, nullable=False)
+    medical_devices: so.Mapped[List["m.MedicalDevice"]] = so.relationship(
+        "MedicalDevice",
+        back_populates="room",  # Must match MedicalDevice's relationship name
+        cascade="all, delete-orphan",  # Optional: auto-delete devices if department is deleted
     )
-
-    department_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("departments.id"))
+    department_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("departments.id"), nullable=False)
 
     department: so.Mapped["m.Department"] = so.relationship(
         "Department", back_populates="rooms"
