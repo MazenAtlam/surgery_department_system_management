@@ -1,6 +1,7 @@
-from datetime import date, time, datetime
-from app import db
+from datetime import date, datetime, time
+
 import app.models as m
+from app import db
 
 
 def init_db():
@@ -19,7 +20,7 @@ def init_db():
         default_pic = m.UploadedFile(
             file_name="default.png",
             file_type="images/png",
-            file_url="https://btvfedqvariqcbjbissj.supabase.co/storage/v1/object/sign/images/default.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5Xzk5MTZiOTRmLTAxODktNDJlMi1iNWMwLWE0NmI4NTk1ZWNmZiJ9.eyJ1cmwiOiJpbWFnZXMvZGVmYXVsdC5wbmciLCJpYXQiOjE3NDYyNzI5MDksImV4cCI6MTc3NzgwODkwOX0.1MZwjbv3q3x_e7iNellhDFHkMgrHnTZUi4fKK5f3fGo"
+            file_url="https://btvfedqvariqcbjbissj.supabase.co/storage/v1/object/sign/images/default.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5Xzk5MTZiOTRmLTAxODktNDJlMi1iNWMwLWE0NmI4NTk1ZWNmZiJ9.eyJ1cmwiOiJpbWFnZXMvZGVmYXVsdC5wbmciLCJpYXQiOjE3NDYyNzI5MDksImV4cCI6MTc3NzgwODkwOX0.1MZwjbv3q3x_e7iNellhDFHkMgrHnTZUi4fKK5f3fGo",
         )
         db.session.add(default_pic)
 
@@ -33,7 +34,7 @@ def init_db():
                 email="mazen1@gmail.com",
                 password="admin1",
                 role=roles[0],  # admin role
-                pic=default_pic
+                pic=default_pic,
             ),
             m.User(
                 name="Sherif Elgendy",
@@ -43,7 +44,7 @@ def init_db():
                 email="sherif2@gmail.com",
                 password="admin2",
                 role=roles[0],  # admin role
-                pic=default_pic
+                pic=default_pic,
             ),
             m.User(
                 name="Anas Elshiekh",
@@ -53,7 +54,7 @@ def init_db():
                 email="anas3@gmail.com",
                 password="admin3",
                 role=roles[0],  # admin role
-                pic=default_pic
+                pic=default_pic,
             ),
             m.User(
                 name="Ahmed Shehab",
@@ -63,7 +64,7 @@ def init_db():
                 email="ahmed3@gmail.com",
                 password="admin4",
                 role=roles[0],  # admin role
-                pic=default_pic
+                pic=default_pic,
             ),
             m.User(
                 name="Mostafa Ashraf",
@@ -73,7 +74,7 @@ def init_db():
                 email="mostafa5@gmail.com",
                 password="admin5",
                 role=roles[0],  # admin role
-                pic=default_pic
+                pic=default_pic,
             ),
             m.User(
                 name="Ahmed Hesham",
@@ -83,7 +84,7 @@ def init_db():
                 email="admin0@example.com",
                 password="admin0",
                 role=roles[0],  # doctor role
-                pic=default_pic
+                pic=default_pic,
             ),
             m.User(
                 name="Abdallah Darwish",
@@ -93,7 +94,7 @@ def init_db():
                 email="doctor0@example.com",
                 password="doctor0",
                 role=roles[1],  # doctor role
-                pic=default_pic
+                pic=default_pic,
             ),
             m.User(
                 name="Omar Hesham",
@@ -103,7 +104,7 @@ def init_db():
                 email="doctor1@example.com",
                 password="doctor1",
                 role=roles[1],  # doctor role
-                pic=default_pic
+                pic=default_pic,
             ),
             m.User(
                 name="Gamal Ashraf",
@@ -113,7 +114,7 @@ def init_db():
                 email="patient0@example.com",
                 password="patient0",
                 role=roles[2],  # patient role
-                pic=default_pic
+                pic=default_pic,
             ),
             m.User(
                 name="Jana Ahmed",
@@ -123,7 +124,7 @@ def init_db():
                 email="patient1@example.com",
                 password="patient1",
                 role=roles[2],  # patient role
-                pic=default_pic
+                pic=default_pic,
             ),
             m.User(
                 name="Sama Abdelrahman",
@@ -133,7 +134,7 @@ def init_db():
                 email="patient2@example.com",
                 password="patient2",
                 role=roles[2],  # patient role
-                pic=default_pic
+                pic=default_pic,
             ),
         ]
 
@@ -158,8 +159,7 @@ def init_db():
 
         # Create Surgery Department
         surgery_dept = m.Department(
-            department_name="Surgery",
-            department_location="First Floor"
+            department_name="Surgery", department_location="First Floor"
         )
 
         db.session.add_all(phone_numbers)
@@ -203,7 +203,8 @@ def init_db():
                 major="جراحة الكبد والبنكرياس والقنوات الصفراوية",
                 department_id=surgery_dept.id,
                 user_id=users[6].id,
-            ),m.Doctor(
+            ),
+            m.Doctor(
                 years_of_experience=12,
                 salary=13000,
                 date_of_hire=date(2013, 11, 10),
@@ -239,38 +240,38 @@ def init_db():
                 doctor=doctors[0],
                 day=m.DayOfWeek.SATURDAY.value,
                 start_time=time(8, 0),
-                end_time=time(16, 0)
+                end_time=time(16, 0),
             ),
             m.WorkingSlot(
                 doctor=doctors[0],
                 day=m.DayOfWeek.SUNDAY.value,
                 start_time=time(8, 0),
-                end_time=time(16, 0)
+                end_time=time(16, 0),
             ),
             m.WorkingSlot(
                 doctor=doctors[0],
                 day=m.DayOfWeek.MONDAY.value,
                 start_time=time(8, 0),
-                end_time=time(16, 0)
+                end_time=time(16, 0),
             ),
             m.WorkingSlot(
                 doctor=doctors[1],
                 day=m.DayOfWeek.TUESDAY.value,
                 start_time=time(8, 0),
-                end_time=time(16, 0)
+                end_time=time(16, 0),
             ),
             m.WorkingSlot(
                 doctor=doctors[1],
                 day=m.DayOfWeek.WEDNESDAY.value,
                 start_time=time(8, 0),
-                end_time=time(16, 0)
+                end_time=time(16, 0),
             ),
             m.WorkingSlot(
                 doctor=doctors[1],
                 day=m.DayOfWeek.THURSDAY.value,
                 start_time=time(8, 0),
-                end_time=time(16, 0)
-            )
+                end_time=time(16, 0),
+            ),
         ]
 
         rooms = [
@@ -306,31 +307,31 @@ def init_db():
                 medical_device_name="أجهزة التخدير",
                 room_id=rooms[0].id,
                 medical_device_price=120000,
-                medical_device_state="Active"
+                medical_device_state="Active",
             ),
             m.MedicalDevice(
                 medical_device_name="(BIS) جهاز مراقبة عمق التخدير",
                 room_id=rooms[0].id,
                 medical_device_price=230000,
-                medical_device_state="Active"
+                medical_device_state="Active",
             ),
             m.MedicalDevice(
                 medical_device_name="طاولات العمليات",
                 room_id=rooms[1].id,
                 medical_device_price=10000,
-                medical_device_state="Active"
+                medical_device_state="Active",
             ),
             m.MedicalDevice(
                 medical_device_name="شفاطات جراحية",
                 room_id=rooms[2].id,
                 medical_device_price=130000,
-                medical_device_state="Active"
+                medical_device_state="Active",
             ),
             m.MedicalDevice(
                 medical_device_name="طاولات العمليات",
                 room_id=rooms[4].id,
                 medical_device_price=10000,
-                medical_device_state="In maintenance"
+                medical_device_state="In maintenance",
             ),
         ]
 
@@ -378,19 +379,19 @@ def init_db():
                 doctor_id=doctors[0].id,
                 appointment_date_time=datetime.now(),
                 room_id=rooms[4].id,
-                file_id=default_pic.id
+                file_id=default_pic.id,
             ),
             m.Appointment(
                 patient_id=patients[0].id,
                 doctor_id=doctors[1].id,
                 appointment_date_time=datetime.now(),
-                room_id=rooms[1].id
+                room_id=rooms[1].id,
             ),
             m.Appointment(
                 patient_id=patients[1].id,
                 doctor_id=doctors[1].id,
                 appointment_date_time=datetime.now(),
-                room_id=rooms[1].id
+                room_id=rooms[1].id,
             ),
         ]
 

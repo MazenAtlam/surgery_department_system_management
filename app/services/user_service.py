@@ -1,6 +1,8 @@
-import psycopg2
 from typing import Dict, List, Optional
+
+import psycopg2
 from flask import current_app
+
 from app.utils.db_connect import get_db_connection
 
 

@@ -8,6 +8,7 @@ import app.models as m
 
 from .base_model import BaseModel
 
+
 class BloodType(str, Enum):
     A_POS = "A+"
     A_NEG = "A-"

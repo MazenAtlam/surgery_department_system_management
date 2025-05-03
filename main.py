@@ -1,4 +1,5 @@
 from app import create_app
+
 # from app.utils.init_db import init_db
 
 app = create_app()

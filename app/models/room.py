@@ -20,7 +20,9 @@ class Room(BaseModel):
         back_populates="room",  # Must match MedicalDevice's relationship name
         cascade="all, delete-orphan",  # Optional: auto-delete devices if department is deleted
     )
-    department_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("departments.id"), nullable=False)
+    department_id: so.Mapped[str] = so.mapped_column(
+        sa.ForeignKey("departments.id"), nullable=False
+    )
 
     department: so.Mapped["m.Department"] = so.relationship(
         "Department", back_populates="rooms"

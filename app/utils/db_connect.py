@@ -1,5 +1,6 @@
 import psycopg2
 from psycopg2 import OperationalError
+
 from app.config import Config
 
 
@@ -12,12 +13,12 @@ def get_db_connection():
     """
     # Replace these with your actual Neon database credentials
     connection_params = {
-        'host': Config.HOST,
-        'database': Config.DBNAME,
-        'user': Config.USERNAME,
-        'password': Config.PASSWORD,
-        'port': Config.PORT,
-        'sslmode': 'require'  # Neon requires SSL connections
+        "host": Config.HOST,
+        "database": Config.DBNAME,
+        "user": Config.USERNAME,
+        "password": Config.PASSWORD,
+        "port": Config.PORT,
+        "sslmode": "require",  # Neon requires SSL connections
     }
 
     try:
