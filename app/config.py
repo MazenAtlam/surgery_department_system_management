@@ -34,5 +34,7 @@ class Config:
         os.environ.get("JWT_SECRET_KEY")
         or "ereteyubcgdhfjmazensherifahmedmostafaanas##$$%^djyfgjidigp0-ititjgj"
     )
-    jwt_access_token_expires = float(os.environ.get("JWT_ACCESS_TOKEN_EXPIRES") or '3600')
+    jwt_access_token_expires = float(
+        os.environ.get("JWT_ACCESS_TOKEN_EXPIRES") or "3600"
+    )
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=jwt_access_token_expires)
