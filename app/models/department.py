@@ -13,15 +13,10 @@ class Department(BaseModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    department_name: so.Mapped[str] = so.mapped_column(unique=True)
-    department_location: so.Mapped[str] = so.mapped_column(unique=True)
+    department_name: so.Mapped[str] = so.mapped_column(unique=True, nullable=False)
+    department_location: so.Mapped[str] = so.mapped_column(nullable=False)
     rooms: so.Mapped[List["m.Room"]] = so.relationship(
         "Room", back_populates="department", cascade="all, delete-orphan"
-    )
-    medical_devices: so.Mapped[List["m.MedicalDevice"]] = so.relationship(
-        "MedicalDevice",
-        back_populates="department",  # Must match MedicalDevice's relationship name
-        cascade="all, delete-orphan",  # Optional: auto-delete devices if department is deleted
     )
     doctors: so.Mapped[List["m.Doctor"]] = so.relationship(
         "Doctor", back_populates="department", cascade="all, delete-orphan"

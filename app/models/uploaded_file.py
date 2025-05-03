@@ -18,9 +18,8 @@ class UploadedFile(BaseModel):
         "User", back_populates="_pic", uselist=False
     )
     file_name: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False)
-    file_url: so.Mapped[str] = so.mapped_column(sa.String(256), nullable=False)
+    file_url: so.Mapped[str] = so.mapped_column(sa.String(1000), nullable=False)
     file_type: so.Mapped[str] = so.mapped_column(sa.String(10), nullable=False)
-    file_size: so.Mapped[float] = so.mapped_column(sa.Float, nullable=False)
     appointments: so.Mapped[List["m.Appointment"]] = so.relationship(
         "Appointment", back_populates="file"
     )

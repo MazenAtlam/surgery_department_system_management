@@ -27,9 +27,11 @@ class Appointment(BaseModel):
     appointment_date_time: so.Mapped[str] = so.mapped_column(
         sa.DateTime, nullable=False
     )
-    room_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("rooms.id"))
+    room_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("rooms.id"), nullable=True)
     room: so.Mapped["m.Room"] = so.relationship("Room", back_populates="appointments")
-    file_id: so.Mapped[str] = so.mapped_column(sa.ForeignKey("uploaded_files.id"))
+    file_id: so.Mapped[str] = so.mapped_column(
+        sa.ForeignKey("uploaded_files.id"), nullable=True
+    )
     file: so.Mapped["m.UploadedFile"] = so.relationship(
         "UploadedFile", back_populates="appointments"
     )
