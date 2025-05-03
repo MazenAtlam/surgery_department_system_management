@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -33,4 +34,5 @@ class Config:
         os.environ.get("JWT_SECRET_KEY")
         or "ereteyubcgdhfjmazensherifahmedmostafaanas##$$%^djyfgjidigp0-ititjgj"
     )
-    JWT_ACCESS_TOKEN_EXPIRES = os.environ.get("JWT_ACCESS_TOKEN_EXPIRES") or 3600
+    jwt_access_token_expires = float(os.environ.get("JWT_ACCESS_TOKEN_EXPIRES") or '3600')
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=jwt_access_token_expires)
