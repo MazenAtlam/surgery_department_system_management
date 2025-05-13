@@ -18,8 +18,8 @@ def register_user(user_data):
     pic_id = m.UploadedFile.query.filter_by(file_name="default.png").first().id
 
     # Convert string to date object
-    dob_str = user_data["dob"]  # This comes from your input data
-    dob = datetime.strptime(dob_str, "%d-%m-%Y").date()
+    dob_str = user_data["date_of_birth"]  # This comes from your input data
+    date_of_birth = datetime.strptime(dob_str, "%d-%m-%Y").date()
 
     gender: str = user_data["gender"][0].upper()  # 'M' or 'F'
 
@@ -27,10 +27,10 @@ def register_user(user_data):
     new_user = m.User(
         email=user_data["email"],
         password=user_data["password"],
-        name=user_data["name"],
+        username=user_data["username"],
         ssn=user_data["ssn"],
         gender=gender,
-        dob=dob,
+        date_of_birth=date_of_birth,
         role_id=role_id,
         pic_id=pic_id,
     )
@@ -61,7 +61,7 @@ def login_user(login_data):
         "success": True,
         "message": "Login successful",
         "access_token": access_token,
-        "user": {"id": user.id, "name": user.name, "email": user.email},
+        "user": {"id": user.id, "username": user.username, "email": user.email},
     }
 
 

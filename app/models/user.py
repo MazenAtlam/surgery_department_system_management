@@ -38,12 +38,14 @@ class User(BaseModel, PasswordMixin, UserMixin):
             if field in kwargs:
                 setattr(self, field, kwargs[field])
 
-    name: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False, index=True)
+    username: so.Mapped[str] = so.mapped_column(
+        sa.String(100), nullable=False, index=True
+    )
     gender: so.Mapped[str] = so.mapped_column(
         sa.Enum("M", "F", name="gender_enum"), nullable=False
     )
     ssn: so.Mapped[str] = so.mapped_column(sa.String(14), nullable=False, index=True)
-    dob: so.Mapped[date] = so.mapped_column(sa.Date, nullable=False)
+    date_of_birth: so.Mapped[date] = so.mapped_column(sa.Date, nullable=False)
     email: so.Mapped[str] = so.mapped_column(
         sa.String(120), unique=True, nullable=False, index=True
     )
