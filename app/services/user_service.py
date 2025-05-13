@@ -23,9 +23,9 @@ def get_user_data_by_id(user_id: str) -> Optional[Dict]:
     try:
         query = """
                 SELECT 
-                    u.name,
+                    u.username,
                     u.email,
-                    EXTRACT(YEAR FROM age(current_date, u.dob))::integer AS age,
+                    EXTRACT(YEAR FROM age(current_date, u.date_of_birth))::integer AS age,
                     u.ssn,
                     u.gender,
                     p.blood_type,
@@ -40,7 +40,7 @@ def get_user_data_by_id(user_id: str) -> Optional[Dict]:
                 LEFT JOIN patients p ON u.id = p.user_id
                 WHERE u.id = %s
                 GROUP BY 
-                    u.id, u.name, u.email, u.dob, 
+                    u.id, u.username, u.email, u.date_of_birth, 
                     u.ssn, u.gender, p.blood_type, uf.file_url
                 """
 
